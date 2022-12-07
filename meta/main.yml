@@ -1,13 +1,11 @@
+---
 galaxy_info:
   role_name: firewalld
   author: Viktor Berke
   description: firewalld configuration
   license: license (MIT)
-  min_ansible_version: 2.8
-  platforms:
-  - name: Ubuntu
-    versions:
-    - bionic
+  min_ansible_version: '2.8'
+  platforms: []
   galaxy_tags: []
 
 dependencies: []

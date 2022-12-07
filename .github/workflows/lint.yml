@@ -1,0 +1,37 @@
+---
+name: Lint
+
+on: # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches: []
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtain sources
+        uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build --tag ${{ github.repository_owner }}-lint docker/lint
+      - name: Lint sources
+        # We need pip installed linter because packaged one ignores config file.
+        # We need --login because pip installs to ~/.local/bin and that is added
+        # to PATH via .bashrc and that's not read by default.
+        # On cloud runners, we also get a
+        # > Failed to discover lintable files using git: fatal: detected dubious
+        # > ownership in repository
+        # warning, so suppress that, too.
+        # TODO ansible-lint ignores role-name in skip_list, and exclude on the
+        # meta doesn't work either:
+        # https://github.com/ansible/ansible-lint/issues/2576
+        # Apply a patch for now, quick-n-dirty sed for the rescue.
+        run: >
+            docker run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-lint /bin/bash --login -c
+            "git config --global --add safe.directory /repo &&
+            yamllint --strict . &&
+            sed -i.orig '/\"role-name\",$/d' /root/.local/lib/python3.11/site-packages/ansiblelint/config.py &&
+            ansible-lint --strict"
