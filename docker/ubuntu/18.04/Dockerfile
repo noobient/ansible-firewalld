@@ -9,3 +9,4 @@ RUN apt -y install --no-install-recommends apt-utils
 RUN apt -y install --no-install-recommends sudo bash gnupg software-properties-common systemd cron kmod dbus-user-session
 CMD [ "/lib/systemd/systemd" ]
 WORKDIR "/repo"
+ENV XDG_RUNTIME_DIR="/run/user/$UID"
