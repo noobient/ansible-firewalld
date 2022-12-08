@@ -16,4 +16,4 @@ RUN rm -rf /etc/systemd/system/*.wants/* \
       /lib/systemd/system/systemd-update-utmp* \
 CMD [ "/lib/systemd/systemd" ]
 WORKDIR "/repo"
-ENV XDG_RUNTIME_DIR="/run/user/$UID"
+#ENV XDG_RUNTIME_DIR="/run/user/$UID"
