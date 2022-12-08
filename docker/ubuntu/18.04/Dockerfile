@@ -5,6 +5,6 @@ RUN apt -y install --no-install-recommends git ca-certificates software-properti
 RUN add-apt-repository -y ppa:ansible/ansible
 RUN apt -y update
 RUN apt -y install ansible
-RUN apt -y install --no-install-recommends sudo bash gnupg software-properties-common systemd cron kmod netbase
+RUN apt -y install --no-install-recommends sudo bash gnupg software-properties-common systemd cron kmod dbus-user-session
 CMD [ "/lib/systemd/systemd" ]
 WORKDIR "/repo"
