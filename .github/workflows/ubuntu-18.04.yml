@@ -1,0 +1,26 @@
+---
+name: Ubuntu 18.04
+
+on: # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches: []
+
+jobs:
+  ubuntu-1804:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtain sources
+        uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build --tag ${{ github.repository_owner }}-ubuntu1804 docker/ubuntu/18.04
+      - name: Test Galaxy role
+        run: >
+            CONT_ID=$(docker run --rm -v ${{ github.workspace }}:/repo -v /sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /tmp --tmpfs /run --privileged --detach ${{ github.repository_owner }}-ubuntu1804) &&
+            docker exec ${CONT_ID} /bin/bash -c
+            "if [ -f requirements.yml ]; then ansible-galaxy role install --force -r requirements.yml; fi &&
+            ANSIBLE_ROLES_PATH=.. ANSIBLE_FORCE_COLOR=true ansible-playbook tests/main.yml" &&
+            docker stop ${CONT_ID}
