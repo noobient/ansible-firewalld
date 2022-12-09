@@ -13,7 +13,7 @@ RUN apt -y install --no-install-recommends git sudo bash gnupg
 # Ansible
 RUN add-apt-repository -y ppa:ansible/ansible
 RUN apt -y update
-RUN apt -y install --no-install-recommends ansible
+RUN DEBIAN_FRONTEND=noninteractive apt -y install --no-install-recommends ansible
 
 # systemd et al
 RUN apt -y install --no-install-recommends systemd cron kmod
