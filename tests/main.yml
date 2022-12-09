@@ -7,3 +7,4 @@
         service: 'foo'
         port: '1234/tcp'
         zone: 'bar'
+        source: '99.99.99.99'
