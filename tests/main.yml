@@ -5,5 +5,5 @@
         name: "{{ playbook_dir.split('/')[:-1] | last }}"
       vars:
         service: 'foo'
-        port: '1234'
+        port: '1234/tcp'
         zone: 'bar'
