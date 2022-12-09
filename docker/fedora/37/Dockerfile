@@ -1,7 +1,7 @@
 FROM fedora:37
 
 # Update
-RUN sed -i 's/^enabled=.*$/enabled=0/g' fedora-cisco-openh264.repo
+RUN sed -i 's/^enabled=.*$/enabled=0/g' /etc/yum.repos.d/fedora-cisco-openh264.repo
 RUN dnf -y update
 
 # Fundamental utils
