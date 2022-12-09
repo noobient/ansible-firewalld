@@ -8,4 +8,4 @@
   when: (zone is defined) and (service is defined) and (source is not defined) and (interface is not defined)
 
 - include_tasks: service.yml
-  when: (service is defined)
+  when: service is defined
