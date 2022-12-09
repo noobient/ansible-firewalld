@@ -7,7 +7,7 @@ This role lets your pass services and/or ports via zones with interfaces or sour
 ## Parameters
 
 | Name | Required | Example | Description |
-|---|---|---|
+|---|---|---|---|
 | `service` | no | `home-assistant` | Service to enable. If `port` is also defined, the service is created with the specified port. Therefore if you use built-in services, omit `port`, otherwise specify it. |
 | `port` | no | `8080/tcp` | Port number and protocol to open. |
 | `zone` | no | `dmz` | Zone to apply the changes to. If not specified, changes are applied to the default zone (`public` usually). A zone must have either a `source` or an `interface`. |
