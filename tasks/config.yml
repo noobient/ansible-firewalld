@@ -3,9 +3,10 @@
 - include_tasks: zone.yml
   when: (zone is defined) and ((source is defined) or (interface is defined))
 
-- fail:
-    msg: "Error! If you specify a service and a zone, you must also specify either a source or an interface corresponding to that zone!"
-  when: (zone is defined) and (service is defined) and (source is not defined) and (interface is not defined)
+# TODO a onze might already exist and have sources/interfaces, so we would have to check.
+#- fail:
+#    msg: "Error! If you specify a service and a zone, you must also specify either a source or an interface corresponding to that zone!"
+#  when: (zone is defined) and (service is defined) and (source is not defined) and (interface is not defined)
 
 - include_tasks: service.yml
   when: service is defined
