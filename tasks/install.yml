@@ -28,19 +28,10 @@
 # and the firewalld module does not work on Ubuntu
 # even though the module is found in python3 shell
 - name: Install firewalld
-  apt:
-    name: firewalld
-    state: latest
-    install_recommends: false
-  register: installed_firewalld
-  when: ansible_os_family == "Debian"
-
-- name: Install firewalld
   package:
     name: firewalld
     state: latest
   register: installed_firewalld
-  when: ansible_os_family != "Debian"
 
 # necessary for Ansible to work remotely
 #- name: Enable SSH access
