@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Obtain sources
         uses: actions/checkout@v3
-      - name: Build Docker image
-        run: docker build --tag ${{ github.repository_owner }}-lint docker/lint
+      - name: Build container image
+        run: podman build --tag ${{ github.repository_owner }}-lint docker/lint
       - name: Lint sources
         # We need pip installed linter because packaged one ignores config file.
         # We need --login because pip installs to ~/.local/bin and that is added
@@ -30,7 +30,7 @@ jobs:
         # https://github.com/ansible/ansible-lint/issues/2576
         # Apply a patch for now, quick-n-dirty sed for the rescue.
         run: >
-            docker run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-lint /bin/bash --login -c
+            podman run --rm -v ${{ github.workspace }}:/repo ${{ github.repository_owner }}-lint /bin/bash --login -c
             "git config --global --add safe.directory /repo &&
             yamllint --strict . &&
             sed -i.orig '/\"role-name\",$/d' /root/.local/lib/python3.11/site-packages/ansiblelint/config.py &&
