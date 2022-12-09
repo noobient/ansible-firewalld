@@ -10,6 +10,7 @@ RUN dnf -y install git sudo bash
 # Ansible
 RUN dnf -y install python3-pip
 RUN python3 -m pip install --user --no-warn-script-location ansible ansible-core
+ENV PATH="${PATH}:/root/.local/bin"
 
 # systemd et al
 RUN dnf -y install systemd cronie kmod
