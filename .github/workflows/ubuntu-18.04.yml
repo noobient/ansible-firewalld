@@ -20,6 +20,7 @@ jobs:
             CONT_ID=$(docker run --rm -v ${{ github.workspace }}:/repo -v /sys/fs/cgroup:/sys/fs/cgroup:ro --tmpfs /tmp --tmpfs /run --privileged --detach geerlingguy/docker-ubuntu1804-ansible:latest) &&
             docker exec ${CONT_ID} /bin/bash -c
             "cd /repo &&
+            apt -y update &&
             if [ -f requirements.yml ]; then ansible-galaxy role install --force -r requirements.yml; fi &&
             ANSIBLE_ROLES_PATH=.. ANSIBLE_FORCE_COLOR=true ansible-playbook tests/main.yml" &&
             docker stop ${CONT_ID}
