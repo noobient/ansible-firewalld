@@ -7,6 +7,7 @@ RUN apt -y update
 RUN apt -y install ansible
 RUN apt -y install --no-install-recommends apt-utils
 RUN DEBIAN_FRONTEND=noninteractive apt -y install --no-install-recommends sudo bash gnupg software-properties-common systemd systemd-sysv cron kmod dbus-user-session
+RUN rm -f /lib/systemd/system/systemd*udev*
 CMD [ "/lib/systemd/systemd" ]
 WORKDIR "/repo"
 #ENV XDG_RUNTIME_DIR="/run/user/$UID"
