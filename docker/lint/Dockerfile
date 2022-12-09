@@ -1,20 +1,23 @@
-FROM fedora:37
+FROM ubuntu:22.04
 
 # Update
-RUN sed -i 's/^enabled=.*$/enabled=0/g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-RUN dnf -y update
+RUN apt -y update
+RUN apt -y dist-upgrade
+
+# Fundamental apt stuff
+RUN DEBIAN_FRONTEND=noninteractive apt -y install --no-install-recommends apt-utils ca-certificates software-properties-common
 
 # Fundamental utils
-RUN dnf -y install git sudo bash
+RUN apt -y install --no-install-recommends git sudo bash gnupg
 
 # Ansible
-RUN dnf -y install python3-pip
+RUN apt -y install --no-install-recommends python3-pip
 RUN python3 -m pip install --user --no-warn-script-location ansible ansible-core
 ENV PATH="${PATH}:/root/.local/bin"
 
 # systemd et al
-RUN dnf -y install systemd cronie kmod
-CMD [ "/sbin/init" ]
+RUN apt -y install --no-install-recommends systemd cron kmod
+CMD [ "/lib/systemd/systemd" ]
 
 # Linter
 RUN python3 -m pip install --user --no-warn-script-location ansible-lint
