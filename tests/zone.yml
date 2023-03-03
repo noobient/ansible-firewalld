@@ -1,0 +1,9 @@
+---
+- name: Get zone details
+  command:
+    cmd: firewall-cmd --zone=bar --list-all
+  changed_when: false
+  register: fwd_zone_bar
+
+- debug:
+    msg: "{{ fwd_zone_bar.stdout_lines }}"

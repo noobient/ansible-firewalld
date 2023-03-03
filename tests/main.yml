@@ -1,6 +1,7 @@
 ---
 - hosts: 127.0.0.1
   tasks:
+    # Basic stuff
     - include_role:
         name: "{{ playbook_dir.split('/')[:-1] | last }}"
       vars:
@@ -8,3 +9,29 @@
         port: '1234/tcp'
         zone: 'bar'
         source: '99.99.99.99'
+
+    - include_tasks: zone.yml
+
+    # Rate limiting
+    - include_role:
+        name: "{{ playbook_dir.split('/')[:-1] | last }}"
+      vars:
+        service: 'foo'
+        port: '1234/tcp'
+        zone: 'bar'
+        source: '99.99.99.99'
+        rate_limit: '10/m'
+
+    - include_tasks: zone.yml
+
+    # Idempotency
+    - include_role:
+        name: "{{ playbook_dir.split('/')[:-1] | last }}"
+      vars:
+        service: 'foo'
+        port: '1234/tcp'
+        zone: 'bar'
+        source: '99.99.99.99'
+        rate_limit: '10/m'
+
+    - include_tasks: zone.yml

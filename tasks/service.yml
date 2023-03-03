@@ -18,8 +18,23 @@
   changed_when: fw_alreadyenabled_str not in fw_port.stderr
   when: port is defined
 
-- name: "Enable {{ service }} firewall service"
+- name: "Enable {{ service }} firewall service without rate limit"
   shell:
     cmd: "firewall-cmd --permanent --add-service={{ service }} {% if zone is defined %}--zone={{ zone }}{% endif %} && firewall-cmd --reload"
-  register: fw_svc
-  changed_when: fw_alreadyenabled_str not in fw_svc.stderr
+  register: fw_svc_add
+  changed_when: fw_alreadyenabled_str not in fw_svc_add.stderr
+  when: rate_limit is not defined
+
+- name: "Disable {{ service }} firewall service without rate limit"
+  shell:
+    cmd: "firewall-cmd --permanent --remove-service={{ service }}{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
+  register: fw_svc_del
+  changed_when: fw_notenabled_str not in fw_svc_del.stderr
+  when: rate_limit is defined
+
+- name: "Enable {{ service }} firewall service with {{ rate_limit }} rate limit"
+  shell:
+    cmd: "firewall-cmd --permanent --add-rich-rule 'rule service name=\"{{ service }}\" accept limit value=\"{{ rate_limit }}\"'{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
+  register: fw_svc_rl_add
+  changed_when: fw_alreadyenabled_str not in fw_svc_rl_add.stderr
+  when: rate_limit is defined
