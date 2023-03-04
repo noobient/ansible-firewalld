@@ -1,37 +1,38 @@
 ---
 - hosts: 127.0.0.1
   tasks:
-    # Basic stuff
-    - include_role:
-        name: "{{ playbook_dir.split('/')[:-1] | last }}"
-      vars:
-        service: 'foo'
-        port: '1234/tcp'
-        zone: 'bar'
-        source: '99.99.99.99'
-
+    # Plain
+    - include_tasks: plain.yml
     - include_tasks: zone.yml
 
-    # Rate limiting
-    - include_role:
-        name: "{{ playbook_dir.split('/')[:-1] | last }}"
-      vars:
-        service: 'foo'
-        port: '1234/tcp'
-        zone: 'bar'
-        source: '99.99.99.99'
-        rate_limit: '10/m'
+    # Switching to rate limited
+    - include_tasks: richrule.yml
+    - include_tasks: zone.yml
 
+    # Disable rich rule
+    - include_tasks: richrule-disable.yml
+    - include_tasks: zone.yml
+
+    # Enable rich rule again
+    - include_tasks: richrule.yml
+    - include_tasks: zone.yml
+
+    # Adjusting rate limits
+    - include_tasks: richrule2.yml
     - include_tasks: zone.yml
 
     # Idempotency
-    - include_role:
-        name: "{{ playbook_dir.split('/')[:-1] | last }}"
-      vars:
-        service: 'foo'
-        port: '1234/tcp'
-        zone: 'bar'
-        source: '99.99.99.99'
-        rate_limit: '10/m'
+    - include_tasks: richrule2.yml
+    - include_tasks: zone.yml
 
+    # Switching back to plain
+    - include_tasks: plain.yml
+    - include_tasks: zone.yml
+
+    # Idempotency
+    - include_tasks: plain.yml
+    - include_tasks: zone.yml
+
+    # Disable plain
+    - include_tasks: plain-disable.yml
     - include_tasks: zone.yml

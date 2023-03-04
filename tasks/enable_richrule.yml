@@ -1,0 +1,5 @@
+---
+- name: "Enable {{ service }} rich rule with {{ rate_limit }} rate limit" # noqa no-changed-when
+  shell:
+    cmd: "firewall-cmd --permanent --add-rich-rule 'rule service name=\"{{ service }}\" accept limit value=\"{{ rate_limit }}\"'{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
+  when: fw_rr_exact_enabled.rc != 0

@@ -12,6 +12,7 @@
     name: ufw
     enabled: false
     state: stopped
+    masked: true
   when: ufw_service.rc == 0
 
 # Ubuntu doesn't have /etc/protocols by default in Docker

@@ -1,0 +1,5 @@
+---
+- name: "Disable {{ service }} service without rate limit" # noqa no-changed-when
+  shell:
+    cmd: "firewall-cmd --permanent --remove-service={{ service }}{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
+  when: fw_svc_enabled.rc == 0

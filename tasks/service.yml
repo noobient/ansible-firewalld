@@ -1,40 +1,22 @@
 ---
-# a possible check for the existence of a service:
-# firewall-cmd --get-services | grep -E '[[:space:]]{{ service }}[[:space:]]|^{{ service }}[[:space:]]|[[:space:]]{{ service }}$'
-# that is, it's either ' http ' (MOL) or 'http ' (SOL) or ' http' (EOL)
-# but it's probably simpler to just omit port number and be done with it
+- include_tasks: new_service.yml
 
-- name: "Create {{ service }} firewall service"
-  shell:
-    cmd: "firewall-cmd --permanent --new-service {{ service }} {% if zone is defined %}--zone={{ zone }}{% endif %} && firewall-cmd --reload"
-  args:
-    creates: "/etc/firewalld/services/{{ service }}.xml"
-  when: port is defined
+- name: "Check if {{ service }} service is currently enabled"
+  command:
+    cmd: "firewall-cmd --query-service={{ service }}{% if zone is defined %} --zone={{ zone }}{% endif %}"
+  changed_when: false
+  failed_when: false
+  register: fw_svc_enabled
 
-- name: "Add port {{ port }} to {{ service }} firewall service"
+- name: "Check if any {{ service }} rich rule is currently enabled"
   shell:
-    cmd: "firewall-cmd --permanent --service={{ service }} --add-port={{ port }} {% if zone is defined %}--zone={{ zone }}{% endif %} && firewall-cmd --reload"
-  register: fw_port
-  changed_when: fw_alreadyenabled_str not in fw_port.stderr
-  when: port is defined
+    cmd: "firewall-cmd --list-rich-rules{% if zone is defined %} --zone={{ zone }}{% endif %} | grep 'service name=\"{{ service }}\"'"
+  changed_when: false
+  failed_when: false
+  register: fw_rr_any_enabled
 
-- name: "Enable {{ service }} firewall service without rate limit"
-  shell:
-    cmd: "firewall-cmd --permanent --add-service={{ service }} {% if zone is defined %}--zone={{ zone }}{% endif %} && firewall-cmd --reload"
-  register: fw_svc_add
-  changed_when: fw_alreadyenabled_str not in fw_svc_add.stderr
+- include_tasks: service_plain.yml
   when: rate_limit is not defined
 
-- name: "Disable {{ service }} firewall service without rate limit"
-  shell:
-    cmd: "firewall-cmd --permanent --remove-service={{ service }}{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
-  register: fw_svc_del
-  changed_when: fw_notenabled_str not in fw_svc_del.stderr
-  when: rate_limit is defined
-
-- name: "Enable {{ service }} firewall service with {{ rate_limit }} rate limit"
-  shell:
-    cmd: "firewall-cmd --permanent --add-rich-rule 'rule service name=\"{{ service }}\" accept limit value=\"{{ rate_limit }}\"'{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
-  register: fw_svc_rl_add
-  changed_when: fw_alreadyenabled_str not in fw_svc_rl_add.stderr
+- include_tasks: service_richrule.yml
   when: rate_limit is defined

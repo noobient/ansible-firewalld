@@ -1,0 +1,10 @@
+---
+- include_role:
+    name: "{{ playbook_dir.split('/')[:-1] | last }}"
+  vars:
+    service: 'foo'
+    port: '1234/tcp'
+    zone: 'bar'
+    source: '99.99.99.99'
+    rate_limit: '10/m'
+    enabled: 'false'

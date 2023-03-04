@@ -1,0 +1,15 @@
+---
+- include_tasks: disable_service.yml
+
+- name: "Check if exact {{ service }} rich rule is currently enabled"
+  command:
+    cmd: "firewall-cmd --query-rich-rule='rule service name=\"{{ service }}\" accept limit value=\"{{ rate_limit }}\"'{% if zone is defined %} --zone={{ zone }}{% endif %}"
+  changed_when: false
+  failed_when: false
+  register: fw_rr_exact_enabled
+
+- include_tasks: disable_richrules.yml
+  when: not eff_enabled or (fw_rr_exact_enabled.rc != 0 and fw_rr_any_enabled.rc == 0)
+
+- include_tasks: enable_richrule.yml
+  when: eff_enabled

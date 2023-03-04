@@ -16,6 +16,7 @@ This role lets your pass services and/or ports via zones with interfaces or sour
 | `fw_target` | no | `ACCEPT` | firewalld target to set for the specified `zone`. Normally shouldn't be required. |
 | `k8s_node` | no | `false` | If `true`, configuration is completely skipped and firewalld is disabled. This can be useful if you configure several hosts and some of them are K8s nodes, where a firewall shouldn't be present in most cases. Therefore this is normally set on a host/group level. |
 | `rate_limit` | no | `10/m` | If set, the service will be enabled with the specified rate limit. |
+| `enabled` | no | `false` | If `false`, the specified service is disabled, instead of enabled. Defaults to `true`. |
 
 ## Examples
 
@@ -38,6 +39,7 @@ This role lets your pass services and/or ports via zones with interfaces or sour
     interface: 'wg0'
     fw_target: 'ACCEPT'
     rate_limit: '100/m'
+    enabled: false
 ```
 
 ## Return Values

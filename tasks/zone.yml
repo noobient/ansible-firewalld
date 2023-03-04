@@ -29,7 +29,7 @@
   when: fw_target is defined
 
 # apparently 'target' is an undocumented built-in alias for inventory_hostname in ansible...
-- name: "Set target to {{ fw_target }} in {{ zone }} zone"
+- name: "Set target to {{ fw_target }} in {{ zone }} zone" # noqa no-changed-when
   shell:
     cmd: "firewall-cmd --zone={{ zone }} --set-target={{ fw_target }} --permanent && firewall-cmd --reload"
   when: (fw_target is defined) and (fw_get_target.stdout != fw_target)

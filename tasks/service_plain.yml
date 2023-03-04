@@ -1,0 +1,8 @@
+---
+- include_tasks: disable_richrules.yml
+
+- include_tasks: disable_service.yml
+  when: not eff_enabled
+
+- include_tasks: enable_service.yml
+  when: eff_enabled

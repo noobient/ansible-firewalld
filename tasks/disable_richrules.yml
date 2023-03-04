@@ -1,0 +1,6 @@
+---
+- name: "Disable {{ service }} rich rule(s)" # noqa no-changed-when
+  shell:
+    cmd: "firewall-cmd --permanent --remove-rich-rule='{{ item }}'{% if zone is defined %} --zone={{ zone }}{% endif %} && firewall-cmd --reload"
+  loop: "{{ fw_rr_any_enabled.stdout_lines }}"
+  when: fw_rr_any_enabled.rc == 0
