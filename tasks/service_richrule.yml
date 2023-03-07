@@ -3,7 +3,7 @@
 
 - name: "Check if exact {{ service }} rich rule is currently enabled"
   command:
-    cmd: "firewall-cmd --query-rich-rule='rule service name=\"{{ service }}\" accept limit value=\"{{ rate_limit }}\"'{% if zone is defined %} --zone={{ zone }}{% endif %}"
+    cmd: "firewall-cmd --query-rich-rule='rule{% if family is defined %} family=\"{{ family }}\"{% endif %} service name=\"{{ service }}\" accept limit value=\"{{ rate_limit }}\"'{% if zone is defined %} --zone={{ zone }}{% endif %}"
   changed_when: false
   failed_when: false
   register: fw_rr_exact_enabled

@@ -16,6 +16,7 @@ This role lets your pass services and/or ports via zones with interfaces or sour
 | `fw_target` | no | `ACCEPT` | firewalld target to set for the specified `zone`. Normally shouldn't be required. |
 | `k8s_node` | no | `false` | If `true`, configuration is completely skipped and firewalld is disabled. This can be useful if you configure several hosts and some of them are K8s nodes, where a firewall shouldn't be present in most cases. Therefore this is normally set on a host/group level. |
 | `rate_limit` | no | `10/m` | If set, the service will be enabled with the specified rate limit. |
+| `family` | no | `ipv6` | If set, the rule will be limited to the specified address family. Only applied if `rate_limit` is also set, otherwise ignored. Possible values are `ipv4`, `ipv6`. |
 | `enabled` | no | `false` | If `false`, the specified service is disabled, instead of enabled. Defaults to `true`. |
 
 ## Examples
@@ -24,21 +25,22 @@ This role lets your pass services and/or ports via zones with interfaces or sour
 - include_role:
     name: bviktor.firewalld
   vars:
-    service: 'https'
+    service: https
 
 - include_role:
     name: bviktor.firewalld
   vars:
-    service: 'sshsec'
-    port: '922/tcp'
+    service: sshsec
+    port: 922/tcp
 
 - include_role:
     name: bviktor.firewalld
   vars:
-    zone: 'wireguard'
-    interface: 'wg0'
-    fw_target: 'ACCEPT'
-    rate_limit: '100/m'
+    zone: wireguard
+    interface: wg0
+    fw_target: ACCEPT
+    rate_limit: 100/m
+    family: ipv6
     enabled: false
 ```
 

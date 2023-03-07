@@ -21,11 +21,23 @@
     - include_tasks: richrule2.yml
     - include_tasks: zone.yml
 
-    # Idempotency
-    - include_tasks: richrule2.yml
+    # Adjusting address family
+    - include_tasks: richrule3.yml
     - include_tasks: zone.yml
 
-    # Switching back to plain
+    # Idempotency
+    - include_tasks: richrule3.yml
+    - include_tasks: zone.yml
+
+    # Have multiple rules
+    - include_tasks: adhoc.yml
+    - include_tasks: zone.yml
+
+    # Should ignore family since no rate limit
+    - include_tasks: richrule4.yml
+    - include_tasks: zone.yml
+
+    # Switching back to plain/idempotency
     - include_tasks: plain.yml
     - include_tasks: zone.yml
 
