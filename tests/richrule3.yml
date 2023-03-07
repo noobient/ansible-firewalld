@@ -7,4 +7,4 @@
     zone: 'bar'
     source: '99.99.99.99'
     rate_limit: '20/m'
-    family: ipv6
+    family: ipv4

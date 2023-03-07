@@ -1,4 +1,4 @@
 ---
-- name: Add ad-hoc rule to test removal of multiple rich rules # noqa no-changed-whend
+- name: Add ad-hoc rule to test removal of multiple rich rules # noqa no-changed-when
   shell:
-    cmd: firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" service name="foo" accept limit value="20/m"' --zone=bar && firewall-cmd --reload
+    cmd: firewall-cmd --permanent --add-rich-rule 'rule family="ipv4" service name="foo" accept limit value="50/m"' --zone=bar && firewall-cmd --reload
