@@ -23,18 +23,18 @@ This role lets your pass services and/or ports via zones with interfaces or sour
 
 ```yml
 - include_role:
-    name: bviktor.firewalld
+    name: noobient.firewalld
   vars:
     service: https
 
 - include_role:
-    name: bviktor.firewalld
+    name: noobient.firewalld
   vars:
     service: sshsec
     port: 922/tcp
 
 - include_role:
-    name: bviktor.firewalld
+    name: noobient.firewalld
   vars:
     zone: wireguard
     interface: wg0
